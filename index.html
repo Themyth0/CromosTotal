@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cromo Vision Pro | Tasador Inteligente</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#39d353">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log("PWA lista para usar"))
+      .catch((err) => console.log("Fallo en PWA", err));
+  }
+</script>
+</head>
+<body>
+    <div id="apiKeyModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; justify-content: center; align-items: center; padding: 20px;">
+    <div style="background: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #39d353; text-align: center; max-width: 400px;">
+        <h3>🔑 Configuración de API</h3>
+        <p style="font-size: 14px; color: #8b949e;">Pega tu API Key de Google AI Studio para empezar a tasar.</p>
+        <input type="password" id="apiKeyInput" placeholder="Introduce tu API Key aquí..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; margin: 15px 0;">
+        <button id="saveKeyBtn" class="custom-button" style="width: 100%;">GUARDAR Y EMPEZAR</button>
+        <p style="font-size: 11px; margin-top: 15px;"><a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #39d353;">¿No tienes una clave? Consíguela gratis aquí.</a></p>
+    </div>
+</div>
+
+    <div class="container">
+        <h1>⚽ Cromo Vision Total</h1>
+        <p>Análisis Multimercado en Tiempo Real</p>
+
+        <div class="upload-section">
+            <div class="button-group">
+                <input type="file" id="imageInput" accept="image/*" hidden>
+                <label for="imageInput" class="custom-button">📂 GALERÍA</label>
+                <button id="openCameraBtn" class="custom-button secondary">📷 USAR CÁMARA</button>
+            </div>
+
+            <div id="cameraContainer" style="display: none;">
+                <video id="cameraFeed" autoplay playsinline></video>
+                <button id="captureBtn" class="capture-button">🔴 CAPTURAR</button>
+            </div>
+
+            <div id="previewContainer" style="position: relative;">
+                <div id="scanLine" class="scanning-line" style="display: none;"></div>
+                <img id="imagePreview" src="" alt="Vista previa" style="display: none;">
+            </div>
+        </div>
+
+        <button id="searchButton" disabled>⚡ ANALIZAR VALOR REAL</button>
+        <p id="statusText"></p>
+
+        <div id="infoCard" style="display: none;">
+            <div class="card-header">
+                <h2 id="dataJugador"></h2>
+                <span id="dataTipo" class="badge-tipo"></span>
+            </div>
+            
+            <p class="collection-text">🏷️ <span id="dataColeccion"></span></p>
+            <hr class="neon-line">
+            
+            <div class="price-section">
+                <h4>💰 Media Global Estimada:</h4>
+                <p id="precioMedio" class="price-main"></p>
+                
+                <div class="platform-breakdown">
+                    <div class="platform-row"><span>Wallapop:</span> <span id="pWallapop"></span></div>
+                    <div class="platform-row"><span>eBay:</span> <span id="pEbay"></span></div>
+                    <div class="platform-row"><span>Todocoleccion:</span> <span id="pTodo"></span></div>
+                    <div class="platform-row"><span>Fanatics:</span> <span id="pFanatics"></span></div>
+                </div>
+            </div>
+
+            <div class="market-grid">
+                <button id="btnWallapop" class="mkt-btn wal">Wallapop</button>
+                <button id="btnEbay" class="mkt-btn eby">eBay</button>
+                <button id="btnTodo" class="mkt-btn tdc">Todocoleccion</button>
+                <button id="btnFanatics" class="mkt-btn fnc">Fanatics</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
