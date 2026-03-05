@@ -17,8 +17,10 @@
 </script>
 </head>
 <body>
-    <div id="apiKeyModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; justify-content: center; align-items: center; padding: 20px;">
-    <div style="background: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #39d353; text-align: center; max-width: 400px;">
+   <div id="apiKeyModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; padding: 20px; overflow-y: auto;">
+    <div style="background: #161b22; padding: 25px; border-radius: 20px; border: 1px solid #39d353; text-align: center; width: 100%; max-width: 350px;">
+        </div>
+</div>
         <h3>🔑 Configuración de API</h3>
         <p style="font-size: 14px; color: #8b949e;">Pega tu API Key de Google AI Studio para empezar a tasar.</p>
         <input type="password" id="apiKeyInput" placeholder="Introduce tu API Key aquí..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; margin: 15px 0;">
@@ -61,25 +63,26 @@
             <p class="collection-text">🏷️ <span id="dataColeccion"></span></p>
             <hr class="neon-line">
             
-            <div class="price-section">
-                <h4>💰 Media Global Estimada:</h4>
-                <p id="precioMedio" class="price-main"></p>
-                
-                <div class="platform-breakdown">
-                    <div class="platform-row"><span>Wallapop:</span> <span id="pWallapop"></span></div>
-                    <div class="platform-row"><span>eBay:</span> <span id="pEbay"></span></div>
-                    <div class="platform-row"><span>Todocoleccion:</span> <span id="pTodo"></span></div>
-                    <div class="platform-row"><span>Fanatics:</span> <span id="pFanatics"></span></div>
-                </div>
-            </div>
+            <div id="infoCard" style="display: none;">
+    <h2 id="dataJugador" style="text-align:center;"></h2>
+    <p id="dataColeccion" style="text-align:center; color:#8b949e; font-size: 0.9rem;"></p>
+    
+    <div id="precioMedio" class="price-main"></div>
 
-            <div class="market-grid">
-                <button id="btnWallapop" class="mkt-btn wal">Wallapop</button>
-                <button id="btnEbay" class="mkt-btn eby">eBay</button>
-                <button id="btnTodo" class="mkt-btn tdc">Todocoleccion</button>
-                <button id="btnFanatics" class="mkt-btn fnc">Fanatics</button>
-            </div>
-        </div>
+    <div class="platform-breakdown">
+        <div class="platform-row"><span>Wallapop</span> <span id="pWallapop">-</span></div>
+        <div class="platform-row"><span>eBay</span> <span id="pEbay">-</span></div>
+        <div class="platform-row"><span>Todocolección</span> <span id="pTodo">-</span></div>
+        <div class="platform-row"><span>Fanatics</span> <span id="pFanatics">-</span></div>
+    </div>
+
+    <div class="market-grid">
+        <button id="btnWallapop" class="mkt-btn wal">Wallapop</button>
+        <button id="btnEbay" class="mkt-btn eby">eBay</button>
+        <button id="btnTodo" class="mkt-btn tdc">TodoCol</button>
+        <button id="btnFanatics" class="mkt-btn fnc">Fanatics</button>
+    </div>
+</div>
     </div>
 
     <script src="script.js"></script>
