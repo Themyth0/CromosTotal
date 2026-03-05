@@ -85,10 +85,10 @@
     <script src="script.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(reg => {
-                reg.update(); // Fuerza actualización del Service Worker
-            });
-        }
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+        reg.update(); // Esto obliga al navegador a buscar cambios en el sw.js cada vez que entras
+    });
+}
     </script>
 </body>
 </html>
