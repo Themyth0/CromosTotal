@@ -11,7 +11,7 @@
 body {
     background-color: var(--bg);
     color: white;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     padding: 15px;
     display: flex;
     justify-content: center;
@@ -29,76 +29,52 @@ body {
 
 h1 { font-size: 1.4rem; text-align: center; margin-bottom: 20px; color: var(--primary); }
 
-/* --- MODAL DE SEGURIDAD --- */
+/* MODAL API */
 .modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9);
-    z-index: 9999;
-    display: flex; /* Se activará desde JS */
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 9999;
+    display: flex; justify-content: center; align-items: center; padding: 20px;
 }
 
 .modal-content {
-    background: var(--card);
-    padding: 25px;
-    border-radius: 20px;
-    border: 1px solid var(--primary);
-    width: 100%;
-    max-width: 340px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
+    background: var(--card); padding: 25px; border-radius: 20px;
+    border: 1px solid var(--primary); width: 100%; max-width: 340px;
+    display: flex; flex-direction: column; gap: 15px; text-align: center;
 }
 
 #apiKeyInput {
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: #0d1117;
-    color: white;
-    text-align: center;
+    padding: 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: #0d1117; color: white; text-align: center;
 }
 
-/* --- BOTONES --- */
+/* BOTONES E IMAGEN */
 .button-group { display: flex; gap: 10px; margin-bottom: 15px; }
 
 .custom-button {
-    flex: 1;
-    background: #238636;
-    color: white;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-    font-size: 0.9rem;
+    flex: 1; background: #238636; color: white; padding: 12px;
+    border-radius: 10px; border: none; font-weight: bold; cursor: pointer;
+    text-align: center; font-size: 0.9rem;
 }
 
 .secondary { background: #21262d; border: 1px solid var(--border); }
 
 .action-btn {
-    width: 100%;
-    padding: 15px;
-    background: var(--primary);
-    color: black;
-    border: none;
-    border-radius: 12px;
-    font-weight: 800;
-    margin-top: 10px;
-    cursor: pointer;
+    width: 100%; padding: 15px; background: var(--primary); color: black;
+    border: none; border-radius: 12px; font-weight: 800; margin-top: 10px; cursor: pointer;
 }
 
 .action-btn:disabled { background: var(--border); color: #8b949e; cursor: not-allowed; }
-.capture-button { width: 100%; padding: 15px; background: #da3633; color: white; border: none; border-radius: 12px; font-weight: bold; margin-top: 10px; cursor: pointer; }
 
-#imagePreview, #cameraFeed { width: 100%; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px; }
+.capture-button {
+    width: 100%; padding: 15px; background: #da3633; color: white;
+    border: none; border-radius: 12px; font-weight: bold; margin-top: 10px; cursor: pointer;
+}
 
-/* --- RESULTADOS Y PRECIOS --- */
+#imagePreview, #cameraFeed {
+    width: 100%; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px;
+}
+
+/* RESULTADOS */
 .price-main { font-size: 2.2rem; color: var(--primary); text-align: center; font-weight: bold; margin: 10px 0; }
 
 .platform-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
@@ -113,13 +89,3 @@ h1 { font-size: 1.4rem; text-align: center; margin-bottom: 20px; color: var(--pr
 .eby { background: #0064d2; }
 .tdc { background: #ffcc00; color: #000; }
 .fnc { background: #ff4500; }
-
-/* --- HISTORIAL --- */
-.history-section { margin-top: 25px; border-top: 1px solid var(--border); padding-top: 15px; }
-.history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-#clearHistory { background: none; border: none; color: #f85149; cursor: pointer; font-size: 13px; font-weight: bold;}
-
-.history-item { display: flex; align-items: center; gap: 10px; background: #21262d; padding: 8px; border-radius: 10px; margin-bottom: 8px; }
-.history-thumb { width: 40px; height: 55px; object-fit: cover; border-radius: 4px; }
-.history-info { flex: 1; font-size: 0.8rem; }
-.history-price { color: var(--primary); font-weight: bold; font-size: 0.9rem;}

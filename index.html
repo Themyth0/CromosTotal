@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cromo Vision Pro</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#39d353">
 </head>
@@ -15,7 +15,7 @@
             <h3 style="color: #39d353; margin:0;">🔑 Configuración API</h3>
             <p style="color: #8b949e; font-size: 13px;">Introduce tu clave de Google AI Studio. Solo se guarda en este dispositivo.</p>
             <input type="password" id="apiKeyInput" placeholder="Pega tu clave aquí...">
-            <button id="saveKeyBtn" class="action-btn">GUARDAR Y EMPEZAR</button>
+            <button id="saveKeyBtn" class="action-btn" style="margin-top: 5px;">GUARDAR Y EMPEZAR</button>
             <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #39d353; font-size: 11px; text-decoration: none;">¿No tienes clave? Consíguela gratis aquí</a>
         </div>
     </div>
@@ -42,14 +42,14 @@
         </div>
 
         <button id="searchButton" class="action-btn" disabled>⚡ ANALIZAR VALOR REAL</button>
-        <p id="statusText" style="text-align: center; margin-top: 10px; font-size: 14px;"></p>
+        <p id="statusText" style="text-align: center; margin-top: 10px; font-size: 14px; font-weight: bold;"></p>
 
         <div id="infoCard" style="display: none;">
             <div style="text-align: center; margin-bottom: 15px;">
                 <h2 id="dataJugador" style="margin:0;"></h2>
                 <span id="dataTipo" style="background:#238636; padding:3px 8px; border-radius:10px; font-size:12px;"></span>
             </div>
-            <p id="dataColeccion" style="text-align: center; color: #8b949e; font-size: 14px;"></p>
+            <p id="dataColeccion" style="text-align: center; color: #8b949e; font-size: 14px; margin-bottom: 10px;"></p>
             
             <div id="precioMedio" class="price-main"></div>
 
@@ -67,25 +67,11 @@
                 <button id="btnFanatics" class="mkt-btn fnc">Fanatics</button>
             </div>
         </div>
-
-        <div class="history-section">
-            <div class="history-header">
-                <h3 style="margin:0;">📜 Historial</h3>
-                <button id="clearHistory">Borrar</button>
-            </div>
-            <div id="historyList" class="history-list"></div>
-        </div>
     </div>
 
     <script src="script.js"></script>
     <script>
-        // Limpiamos service workers antiguos para evitar problemas de caché
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for(let registration of registrations) {
-                    registration.update();
-                }
-            });
             navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
         }
     </script>
