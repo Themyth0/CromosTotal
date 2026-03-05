@@ -11,7 +11,7 @@
 body {
     background-color: var(--bg);
     color: white;
-    font-family: -apple-system, system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     padding: 15px;
     display: flex;
     justify-content: center;
@@ -24,17 +24,18 @@ body {
     padding: 20px;
     border-radius: 20px;
     border: 1px solid var(--border);
+    margin-top: 10px;
 }
 
 h1 { font-size: 1.4rem; text-align: center; margin-bottom: 20px; color: var(--primary); }
 
-
+/* --- MODAL DE SEGURIDAD --- */
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9);
     z-index: 9999;
-    display: flex; 
+    display: flex; /* Se activará desde JS */
     justify-content: center;
     align-items: center;
     padding: 20px;
@@ -48,7 +49,7 @@ h1 { font-size: 1.4rem; text-align: center; margin-bottom: 20px; color: var(--pr
     width: 100%;
     max-width: 340px;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     gap: 15px;
     text-align: center;
 }
@@ -62,7 +63,7 @@ h1 { font-size: 1.4rem; text-align: center; margin-bottom: 20px; color: var(--pr
     text-align: center;
 }
 
-
+/* --- BOTONES --- */
 .button-group { display: flex; gap: 10px; margin-bottom: 15px; }
 
 .custom-button {
@@ -89,68 +90,36 @@ h1 { font-size: 1.4rem; text-align: center; margin-bottom: 20px; color: var(--pr
     border-radius: 12px;
     font-weight: 800;
     margin-top: 10px;
+    cursor: pointer;
 }
 
-#imagePreview, #cameraFeed {
-    width: 100%;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-}
+.action-btn:disabled { background: var(--border); color: #8b949e; cursor: not-allowed; }
+.capture-button { width: 100%; padding: 15px; background: #da3633; color: white; border: none; border-radius: 12px; font-weight: bold; margin-top: 10px; cursor: pointer; }
 
+#imagePreview, #cameraFeed { width: 100%; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px; }
 
-.price-main {
-    font-size: 2.2rem;
-    color: var(--primary);
-    text-align: center;
-    font-weight: bold;
-    margin: 10px 0;
-}
+/* --- RESULTADOS Y PRECIOS --- */
+.price-main { font-size: 2.2rem; color: var(--primary); text-align: center; font-weight: bold; margin: 10px 0; }
 
-.platform-breakdown {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 15px;
-}
+.platform-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
 
-.platform-row {
-    background: #0d1117;
-    padding: 10px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    font-size: 0.8rem;
-}
-
+.platform-row { background: #0d1117; padding: 10px; border-radius: 8px; display: flex; flex-direction: column; font-size: 0.8rem; }
 .platform-row span:last-child { color: var(--primary); font-weight: bold; font-size: 1rem; }
 
-.market-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-}
+.market-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 
-.mkt-btn { padding: 10px; border-radius: 8px; border: none; font-size: 0.75rem; font-weight: bold; color: white; }
+.mkt-btn { padding: 10px; border-radius: 8px; border: none; font-size: 0.75rem; font-weight: bold; color: white; cursor: pointer;}
 .wal { background: #13c1ac; }
 .eby { background: #0064d2; }
 .tdc { background: #ffcc00; color: #000; }
 .fnc { background: #ff4500; }
 
-
+/* --- HISTORIAL --- */
 .history-section { margin-top: 25px; border-top: 1px solid var(--border); padding-top: 15px; }
 .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-#clearHistory { background: none; border: none; color: #f85149; cursor: pointer; }
+#clearHistory { background: none; border: none; color: #f85149; cursor: pointer; font-size: 13px; font-weight: bold;}
 
-.history-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #21262d;
-    padding: 8px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-}
-
+.history-item { display: flex; align-items: center; gap: 10px; background: #21262d; padding: 8px; border-radius: 10px; margin-bottom: 8px; }
 .history-thumb { width: 40px; height: 55px; object-fit: cover; border-radius: 4px; }
 .history-info { flex: 1; font-size: 0.8rem; }
-.history-price { color: var(--primary); font-weight: bold; }
+.history-price { color: var(--primary); font-weight: bold; font-size: 0.9rem;}
