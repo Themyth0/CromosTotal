@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cromo Vision Pro</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=4">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#39d353">
 </head>
@@ -25,23 +25,36 @@
         
         <div class="upload-section">
             <div class="button-group">
-                <input type="file" id="imageInput" accept="image/*" hidden>
+                <input type="file" id="imageInput" accept="image/*" hidden multiple>
                 <label for="imageInput" class="custom-button">📂 GALERÍA</label>
                 <button id="openCameraBtn" class="custom-button secondary">📷 CÁMARA</button>
             </div>
 
-            <div id="cameraContainer" style="display: none;">
+            <div id="cameraContainer" style="display: none; margin-bottom: 15px;">
                 <video id="cameraFeed" autoplay playsinline></video>
-                <button id="captureBtn" class="capture-button">🔴 CAPTURAR</button>
+                <div class="button-group" style="margin-top:10px;">
+                    <button id="captureFrontBtn" class="custom-button">📸 FOTO DELANTE</button>
+                    <button id="captureBackBtn" class="custom-button">📸 FOTO DETRÁS</button>
+                </div>
+                <button id="closeCameraBtn" class="capture-button" style="background:#444; margin-top: 10px;">CERRAR</button>
             </div>
 
-            <div id="previewContainer">
+            <div class="dual-preview">
+                <div class="preview-box" id="boxFront">
+                    <span class="label">FRONTAL</span>
+                    <img id="previewFront" src="" style="display: none;">
+                </div>
+                <div class="preview-box" id="boxBack">
+                    <span class="label">TRASERA</span>
+                    <img id="previewBack" src="" style="display: none;">
+                </div>
                 <div id="scanLine" class="scanning-line" style="display: none;"></div>
-                <img id="imagePreview" src="" alt="Vista previa" style="display: none;">
             </div>
         </div>
 
         <button id="searchButton" class="action-btn" disabled>⚡ ANALIZAR VALOR REAL</button>
+        <button id="resetButton" class="custom-button secondary" style="width: 100%; margin-top: 10px; border-color: #f85149; color: #f85149;">🗑️ NUEVA BÚSQUEDA</button>
+        
         <p id="statusText" style="text-align: center; margin-top: 10px; font-size: 14px; font-weight: bold;"></p>
 
         <div id="infoCard" style="display: none;">
@@ -72,7 +85,9 @@
     <script src="script.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                reg.update(); // Fuerza actualización del Service Worker
+            });
         }
     </script>
 </body>

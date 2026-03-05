@@ -21,128 +21,141 @@ saveKeyBtn.onclick = () => {
 
 // --- VARIABLES ---
 const imageInput = document.getElementById('imageInput');
-const imagePreview = document.getElementById('imagePreview');
+const previewFront = document.getElementById('previewFront');
+const previewBack = document.getElementById('previewBack');
 const openCameraBtn = document.getElementById('openCameraBtn');
 const cameraContainer = document.getElementById('cameraContainer');
 const cameraFeed = document.getElementById('cameraFeed');
-const captureBtn = document.getElementById('captureBtn');
+const captureFrontBtn = document.getElementById('captureFrontBtn');
+const captureBackBtn = document.getElementById('captureBackBtn');
 const searchButton = document.getElementById('searchButton');
+const resetButton = document.getElementById('resetButton'); // Botón nuevo
 const statusText = document.getElementById('statusText');
 const infoCard = document.getElementById('infoCard');
 const scanLine = document.getElementById('scanLine');
 
 let stream = null;
 
-// --- CÁMARA ---
+// --- SISTEMA DE CÁMARA DUAL ---
 openCameraBtn.addEventListener('click', async () => {
     try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+        stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: "environment" }, 
+            audio: false 
+        });
         cameraFeed.srcObject = stream;
         cameraContainer.style.display = 'block';
-        imagePreview.style.display = 'none';
-        infoCard.style.display = 'none';
-        statusText.innerHTML = "";
+        statusText.innerHTML = "📸 Encuadra el cromo";
     } catch (err) {
-        alert("Error al abrir la cámara.");
+        alert("Error al abrir la cámara. Revisa los permisos.");
     }
 });
 
-captureBtn.addEventListener('click', () => {
+function capturePhoto(targetImg) {
     const canvas = document.createElement('canvas');
     canvas.width = cameraFeed.videoWidth;
     canvas.height = cameraFeed.videoHeight;
-    canvas.getContext('2d').drawImage(cameraFeed, 0, 0);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(cameraFeed, 0, 0);
     
-    imagePreview.src = canvas.toDataURL('image/jpeg');
-    imagePreview.style.display = 'block';
+    targetImg.src = canvas.toDataURL('image/jpeg');
+    targetImg.style.display = 'block';
     
-    stopCamera();
-    searchButton.disabled = false;
-});
-
-function stopCamera() {
-    if (stream) stream.getTracks().forEach(t => t.stop());
-    cameraContainer.style.display = 'none';
+    if (previewFront.src.includes('data:image')) {
+        searchButton.disabled = false;
+        statusText.innerHTML = "✅ Frontal lista. ¿Añadir trasera?";
+    }
 }
 
+captureFrontBtn.onclick = () => capturePhoto(previewFront);
+captureBackBtn.onclick = () => {
+    capturePhoto(previewBack);
+    statusText.innerHTML = "✅ Ambas fotos listas.";
+};
+
+document.getElementById('closeCameraBtn').onclick = () => {
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    cameraContainer.style.display = 'none';
+};
+
+// --- LÓGICA DE GALERÍA (INTELIGENTE) ---
 imageInput.addEventListener('change', (e) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        imagePreview.src = event.target.result;
-        imagePreview.style.display = 'block';
-        infoCard.style.display = 'none';
-        statusText.innerHTML = "";
-        searchButton.disabled = false;
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    const leerImagen = (file, target) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            target.src = ev.target.result;
+            target.style.display = 'block';
+            searchButton.disabled = false;
+        };
+        reader.readAsDataURL(file);
     };
-    reader.readAsDataURL(e.target.files[0]);
+
+    if (files.length >= 2) {
+        leerImagen(files[0], previewFront);
+        leerImagen(files[1], previewBack);
+        statusText.innerHTML = "✅ Dos fotos cargadas.";
+    } else {
+        if (!previewFront.src || previewFront.style.display === 'none') {
+            leerImagen(files[0], previewFront);
+            statusText.innerHTML = "✅ Frontal cargada.";
+        } else {
+            leerImagen(files[0], previewBack);
+            statusText.innerHTML = "✅ Trasera cargada.";
+        }
+    }
+    imageInput.value = ""; 
 });
 
-// --- LÓGICA DE ANÁLISIS REPARADA (Funciona a la primera) ---
-searchButton.addEventListener('click', async () => {
-    if (!GEMINI_API_KEY) {
-        apiKeyModal.style.display = 'flex';
-        return;
-    }
+// --- BOTÓN RESET (LIMPIAR TODO) ---
+resetButton.onclick = () => {
+    previewFront.src = "";
+    previewFront.style.display = 'none';
+    previewBack.src = "";
+    previewBack.style.display = 'none';
+    infoCard.style.display = 'none';
+    searchButton.disabled = true;
+    statusText.innerHTML = "🧹 Todo limpio.";
+    statusText.style.color = "white";
+    imageInput.value = "";
+};
 
-    // Bloqueamos el botón INMEDIATAMENTE para que no haya dobles clics
+// --- ANÁLISIS ---
+searchButton.addEventListener('click', async () => {
+    if (!GEMINI_API_KEY) return;
+
     searchButton.disabled = true;
     statusText.style.color = "white";
-    statusText.innerHTML = "⏳ Analizando mercado real...";
+    statusText.innerHTML = "⏳ Identificando con ambas caras...";
     scanLine.style.display = "block";
-    infoCard.style.display = "none"; // Ocultamos el resultado anterior si lo hubiera
+    infoCard.style.display = "none";
 
     try {
-        const base64Image = imagePreview.src.split(',')[1];
-        
-        const payload = {
-            contents: [{
-                parts: [
-                    { text: `Eres un tasador experto de mercado secundario (Wallapop/eBay). 
-                    Tu misión es dar el VALOR DE VENTA RÁPIDA, no el valor de catálogo.
-                    
-                    INSTRUCCIONES DE PRECIO:
-                    1. Si el cromo es común, el precio es 1€-3€.
-                    2. Si es una marca como Daka o Mundicromo, no asumas que es cara por ser antigua; busca el precio de usuario particular (10€-20€ máximo si no es una estrella mundial).
-                    3. REGLA DE ORO: Si dudas entre un precio de 70$ y uno de 18$, elige SIEMPRE el más bajo. Prefiero que la tasación sea baja a que sea engañosa.
-                    
-                    FORMATO DE SALIDA ESTRICTO (JSON):
-                    {
-                      "jugador": "Nombre",
-                      "tipo": "Serie/Variante",
-                      "coleccion": "Marca/Año",
-                      "precio_medio": "Valor más bajo encontrado",
-                      "pWallapop": "Precio venta rápida",
-                      "pEbay": "Precio venta finalizada",
-                      "pTodo": "Precio Todocoleccion",
-                      "pFanatics": "Precio USA",
-                      "query_especifica": "Marca Jugador Año Serie",
-                      "query_simple": "Marca Jugador Año"
-                    }` 
-                    },
-                    { inline_data: { mime_type: "image/jpeg", data: base64Image } }
-                ]
-            }]
-        };
+        const promptText = `Eres un tasador experto. Usa la trasera para confirmar número, año y colección. Dame el valor de VENTA RÁPIDA REAL.
+        JSON: { "jugador": "Nombre", "tipo": "Variante", "coleccion": "Año", "precio_medio": "Valor", "pWallapop": "€", "pEbay": "€", "pTodo": "€", "pFanatics": "€", "query_especifica": "Marca Jugador Año Serie", "query_simple": "Marca Jugador" }`;
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+        const imageParts = [];
+        imageParts.push({ inline_data: { mime_type: "image/jpeg", data: previewFront.src.split(',')[1] } });
+        if (previewBack.src && previewBack.src.includes('data:image')) {
+            imageParts.push({ inline_data: { mime_type: "image/jpeg", data: previewBack.src.split(',')[1] } });
+        }
+
+        // CORREGIDO: gemini-2.5-flash
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ contents: [{ parts: [{ text: promptText }, ...imageParts] }] })
         });
 
-        if (!response.ok) throw new Error("Fallo en la conexión con la IA.");
-
         const result = await response.json();
-        const rawText = result.candidates[0].content.parts[0].text;
-        const datos = JSON.parse(rawText.match(/\{[\s\S]*\}/)[0]);
-
+        const datos = JSON.parse(result.candidates[0].content.parts[0].text.match(/\{[\s\S]*\}/)[0]);
         mostrarResultados(datos);
         
     } catch (error) {
-        // Si hay un error, lo mostramos claro y volvemos a activar el botón
         statusText.style.color = "#f85149";
-        statusText.innerHTML = "❌ Error al analizar. Prueba de nuevo.";
-        console.error(error);
+        statusText.innerHTML = "❌ Error. Prueba de nuevo.";
         searchButton.disabled = false;
     } finally {
         scanLine.style.display = "none";
@@ -151,7 +164,7 @@ searchButton.addEventListener('click', async () => {
 
 function mostrarResultados(datos) {
     statusText.style.color = "#39d353";
-    statusText.innerHTML = "✅ Tasación completada.";
+    statusText.innerHTML = "✅ Tasación de alta precisión completada.";
     infoCard.style.display = 'block';
     
     document.getElementById('dataJugador').innerText = datos.jugador;
@@ -163,11 +176,28 @@ function mostrarResultados(datos) {
     document.getElementById('pTodo').innerText = datos.pTodo;
     document.getElementById('pFanatics').innerText = datos.pFanatics;
 
+    // --- MEJORA DE BÚSQUEDA ESPECÍFICA PARA WALLAPOP ---
+    // Creamos una búsqueda que incluya Jugador + Año + Colección
+    // Ejemplo: "Lamine Yamal 2024 Megacracks" en lugar de solo "Lamine Yamal"
+    const busquedaWallapop = `${datos.jugador} ${datos.coleccion}`.trim();
+    const qWalla = encodeURIComponent(busquedaWallapop).replace(/%20/g, '+');
+
+    // Para eBay/Fanatics seguimos usando la query_especifica (incluye "Refractor", "Numbered", etc.)
     const qEsp = encodeURIComponent(datos.query_especifica).replace(/%20/g, '+');
+    
+    // Para Todocoleccion usamos la query_simple
     const qSim = encodeURIComponent(datos.query_simple).replace(/%20/g, '+');
 
-    document.getElementById('btnWallapop').onclick = () => window.open(`https://es.wallapop.com/app/search?keywords=${qEsp}&filters_source=search_box`, '_blank');
-    document.getElementById('btnEbay').onclick = () => window.open(`https://www.ebay.es/sch/i.html?_nkw=${qEsp}&LH_Sold=1&LH_Complete=1`, '_blank');
-    document.getElementById('btnFanatics').onclick = () => window.open(`https://www.fanaticscollect.com/marketplace?type=FIXED&category=Sports+Cards+%3E+Soccer&q=${qEsp}&page=1`, '_blank');
-    document.getElementById('btnTodo').onclick = () => window.open(`https://www.todocoleccion.net/buscador?from=top&bu=${qSim}&forced&sec=coleccionismo-deportivo`, '_blank');
+    // ASIGNACIÓN A BOTONES
+    document.getElementById('btnWallapop').onclick = () => 
+        window.open(`https://es.wallapop.com/app/search?keywords=${qWalla}&filters_source=search_box`, '_blank');
+    
+    document.getElementById('btnEbay').onclick = () => 
+        window.open(`https://www.ebay.es/sch/i.html?_nkw=${qEsp}&LH_Sold=1&LH_Complete=1`, '_blank');
+    
+    document.getElementById('btnFanatics').onclick = () => 
+        window.open(`https://www.fanaticscollect.com/marketplace?q=${qEsp}`, '_blank');
+    
+    document.getElementById('btnTodo').onclick = () => 
+        window.open(`https://www.todocoleccion.net/buscador?bu=${qSim}`, '_blank');
 }
