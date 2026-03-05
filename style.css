@@ -1,101 +1,120 @@
-/* Reseteo básico y fuentes */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+:root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --primary: #39d353;
+    --border: #30363d;
+    --text-dim: #8b949e;
 }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background-color: #0d1117;
+    background-color: var(--bg);
     color: white;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, system-ui, sans-serif;
+    padding: 15px;
     display: flex;
     justify-content: center;
-    min-height: 100vh;
-    padding: 10px;
 }
 
-/* Contenedor principal responsive */
 .container {
     width: 100%;
-    max-width: 500px; /* Limita el ancho en tablets/PC para que no se estire */
-    background: #161b22;
+    max-width: 480px;
+    background: var(--card);
     padding: 20px;
-    border-radius: 24px;
-    border: 1px solid #30363d;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    margin: auto;
+    border-radius: 20px;
+    border: 1px solid var(--border);
 }
 
-h1 {
-    font-size: 1.5rem;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #39d353;
+h1 { font-size: 1.4rem; text-align: center; margin-bottom: 20px; color: var(--primary); }
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 9999;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
-/* Botones adaptables */
-.button-group {
+.modal-content {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid var(--primary);
+    width: 100%;
+    max-width: 340px;
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    flex-direction: column; 
+    gap: 15px;
+    text-align: center;
 }
+
+#apiKeyInput {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #0d1117;
+    color: white;
+    text-align: center;
+}
+
+
+.button-group { display: flex; gap: 10px; margin-bottom: 15px; }
 
 .custom-button {
-    flex: 1; /* Se reparten el espacio al 50/50 */
+    flex: 1;
     background: #238636;
     color: white;
-    padding: 14px 10px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: bold;
+    padding: 12px;
+    border-radius: 10px;
     border: none;
+    font-weight: bold;
+    cursor: pointer;
     text-align: center;
     font-size: 0.9rem;
-    transition: transform 0.1s;
 }
 
-.custom-button:active { transform: scale(0.95); }
-.secondary { background: #21262d; border: 1px solid #30363d; }
+.secondary { background: #21262d; border: 1px solid var(--border); }
 
-/* Cámara y Preview */
-#cameraFeed, #imagePreview {
+.action-btn {
     width: 100%;
-    height: auto;
-    max-height: 400px;
-    object-fit: contain;
-    border-radius: 16px;
-    border: 2px solid #30363d;
-    background: #000;
+    padding: 15px;
+    background: var(--primary);
+    color: black;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    margin-top: 10px;
 }
 
-/* Tarjeta de información mejorada */
-#infoCard {
-    margin-top: 20px;
-    padding: 15px;
-    background: #0d1117;
-    border-radius: 16px;
-    border: 1px solid #39d353;
+#imagePreview, #cameraFeed {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border);
 }
+
 
 .price-main {
     font-size: 2.2rem;
-    color: #39d353;
-    font-weight: 800;
+    color: var(--primary);
     text-align: center;
+    font-weight: bold;
     margin: 10px 0;
 }
 
-/* Desglose de precios en rejilla */
 .platform-breakdown {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Dos columnas en móvil */
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin: 15px 0;
+    margin-bottom: 15px;
 }
 
 .platform-row {
-    background: #21262d;
+    background: #0d1117;
     padding: 10px;
     border-radius: 8px;
     display: flex;
@@ -103,41 +122,35 @@ h1 {
     font-size: 0.8rem;
 }
 
-.platform-row span:last-child {
-    font-weight: bold;
-    color: #39d353;
-    font-size: 1rem;
-}
+.platform-row span:last-child { color: var(--primary); font-weight: bold; font-size: 1rem; }
 
-/* Cuadrícula de botones de mercado */
 .market-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
 }
 
-.mkt-btn {
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    font-size: 0.8rem;
-    font-weight: bold;
-    cursor: pointer;
-    color: white;
-}
-
+.mkt-btn { padding: 10px; border-radius: 8px; border: none; font-size: 0.75rem; font-weight: bold; color: white; }
 .wal { background: #13c1ac; }
 .eby { background: #0064d2; }
 .tdc { background: #ffcc00; color: #000; }
 .fnc { background: #ff4500; }
 
-/* Ajustes para pantallas muy pequeñas */
-@media (max-width: 360px) {
-    .button-group { flex-direction: column; }
-    .price-main { font-size: 1.8rem; }
+
+.history-section { margin-top: 25px; border-top: 1px solid var(--border); padding-top: 15px; }
+.history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+#clearHistory { background: none; border: none; color: #f85149; cursor: pointer; }
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #21262d;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 8px;
 }
 
-/* Ajustes para Tablets/Desktop */
-@media (min-width: 768px) {
-    .container { max-width: 600px; padding: 40px; }
-}
+.history-thumb { width: 40px; height: 55px; object-fit: cover; border-radius: 4px; }
+.history-info { flex: 1; font-size: 0.8rem; }
+.history-price { color: var(--primary); font-weight: bold; }

@@ -1,18 +1,16 @@
-// --- GESTIÓN DE LA API KEY SEGURA ---
-// Intentamos recuperar la clave del almacenamiento del móvil/navegador
+
 let GEMINI_API_KEY = localStorage.getItem('gemini_api_key');
 
-// Elementos del Modal de configuración (asegúrate de tenerlos en tu HTML)
+
 const apiKeyModal = document.getElementById('apiKeyModal');
 const apiKeyInput = document.getElementById('apiKeyInput');
 const saveKeyBtn = document.getElementById('saveKeyBtn');
 
-// Si no hay clave guardada, mostramos el modal para que el usuario la ponga
+
 if (!GEMINI_API_KEY) {
     apiKeyModal.style.display = 'flex';
 }
 
-// Función para guardar la clave cuando el usuario pulsa el botón
 saveKeyBtn.onclick = () => {
     const key = apiKeyInput.value.trim();
     if (key) {
@@ -25,7 +23,6 @@ saveKeyBtn.onclick = () => {
     }
 };
 
-// --- RESTO DE TUS VARIABLES ---
 const imageInput = document.getElementById('imageInput');
 const imagePreview = document.getElementById('imagePreview');
 const openCameraBtn = document.getElementById('openCameraBtn');
@@ -39,7 +36,7 @@ const scanLine = document.getElementById('scanLine');
 
 let stream = null;
 
-// --- LÓGICA DE CÁMARA ---
+
 openCameraBtn.addEventListener('click', async () => {
     try {
         stream = await navigator.mediaDevices.getUserMedia({ 
@@ -83,9 +80,9 @@ imageInput.addEventListener('change', (e) => {
     reader.readAsDataURL(e.target.files[0]);
 });
 
-// --- LÓGICA DE ANÁLISIS (PRECIOS REALISTAS + BÚSQUEDA EXACTA) ---
+
 searchButton.addEventListener('click', async () => {
-    // Verificación de seguridad: si no hay clave, no dejamos avanzar
+   
     if (!GEMINI_API_KEY) {
         apiKeyModal.style.display = 'flex';
         return;
@@ -128,7 +125,7 @@ searchButton.addEventListener('click', async () => {
             }]
         };
 
-        // NOTA: He actualizado la URL para usar la variable GEMINI_API_KEY dinámica
+       
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
